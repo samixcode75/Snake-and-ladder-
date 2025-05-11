@@ -1,0 +1,109 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+void board(int player1, int player2)
+{
+    cout << "board is " << endl;
+    for (int r = 9; r >= 0; r--)
+    {
+        cout << "-----------------------------------------" << endl;
+        for (int c = 0; c < 10; c++)
+        {
+            cout << "|";
+            int pos = r * 10 + c + 1;
+            if (pos == player1)
+            {
+                cout <<"p1 ";
+            }
+            else if (pos == player2)
+            {
+                cout <<"P2 ";
+            }
+            else
+            {
+                if (pos >= 0 and pos <= 10)
+                {
+                    cout << pos << "  ";
+                }
+                else
+                    cout << pos << " ";
+            }
+           
+        }
+        if (r == 9 or r == 0)
+        {
+            cout << "|";
+        }
+        else
+        {
+            cout << " |";
+        }
+        cout << endl;
+
+    }
+    cout << "-----------------------------------------" << endl;
+    cout << endl;
+}
+
+int main() {
+    srand(time(0)); 
+    cout << "----------------------------------------" << endl;
+    cout << "|Welcome to the game of Snake and Ladder|" << endl;
+    cout << "----------------------------------------" << endl;
+
+    int player1 = 0, player2 = 0; 
+    int turn = 1, roll;
+    int ladder[4] = {13, 25, 34, 54 };
+    int jump[4] = { 30, 50, 60, 80 };
+    int snake[4] = { 26, 45, 69, 92 };
+    int drop[4] = { 5, 20, 45, 40 };
+  
+    while (player1 < 100 && player2 < 100) 
+    {
+        int currentPlayer = (turn % 2 == 1) ? 1 : 2;
+        int& position = (currentPlayer == 1) ? player1 : player2;//code ko acha bananay kay liay or short krnay kay liay yahan int and use 
+        board(player1, player2);
+        cout << "\n|Player " << currentPlayer << "|\n roll the dice (Press Enter to roll)";
+        cin.ignore(); 
+        roll = (rand() % 6) + 1;
+        cout << "The rolled dice value is: " << roll << endl;
+
+        if (position + roll <= 100) {
+            position += roll;
+
+            
+            for (int i = 0; i < 4; i++) 
+            {
+
+                if (position == ladder[i]) {
+                    cout << "You climbed a ladder to " << jump[i]  << endl;
+                    position = jump[i];
+                }
+                else if (position == snake[i]) 
+                {
+                    cout << "A snake bit you! You dropped to " << drop[i] << endl;
+                    position = drop[i];
+                }
+            }
+        }
+        else 
+        {
+            cout << "Roll exceeds 100. Stay at " << position << "." << endl;
+        }
+
+        cout << "Player " << currentPlayer << " is now at position " << position << endl;
+
+        if (position == 100)
+        {
+            cout << "-------------------------------------------------" << endl;
+            cout << "\n?? Player " << currentPlayer << " wins the game! ??" << endl;
+            cout << "-------------------------------------------------" << endl;
+            break;
+        }
+
+        turn++; 
+    }
+
+    return 0;
+}
